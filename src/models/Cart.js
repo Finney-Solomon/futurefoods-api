@@ -10,12 +10,12 @@ const itemSchema = new mongoose.Schema(
   },
   quantity: { type: Number, default: 1, min: 1 },
  },
- { _id: false }
+{ _id: true }
 );
 
 const cartSchema = new mongoose.Schema(
  {
-  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", unique: true },
+   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", unique: true, required: true, index: true },
   items: [itemSchema],
  },
  { timestamps: true }

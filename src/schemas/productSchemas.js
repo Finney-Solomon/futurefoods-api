@@ -1,4 +1,4 @@
-// src/schemas/productSchemas.js
+
 import { z } from "zod";
 export const productCreateSchema = z.object({
  name: z.string().min(2),
@@ -8,6 +8,7 @@ export const productCreateSchema = z.object({
  imageUrl: z.string().url().optional(),
  isActive: z.boolean().optional(),
  stock: z.number().int().nonnegative().optional(),
- description: z.string().min(2)
+ description: z.string().min(2),
+ featuredProducts: z.boolean().optional().default(false),
 });
 export const productUpdateSchema = productCreateSchema.partial();
