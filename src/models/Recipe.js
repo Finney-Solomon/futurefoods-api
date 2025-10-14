@@ -1,4 +1,3 @@
-// src/models/Recipe.ts
 import mongoose from "mongoose";
 
 const recipeSchema = new mongoose.Schema(
@@ -6,21 +5,21 @@ const recipeSchema = new mongoose.Schema(
     title: { type: String, required: true, trim: true },
     slug: { type: String, required: true, unique: true, index: true },
     imageUrl: { type: String },
-    shortDescription: { type: String, required: true }, // for cards
-    ingredients: [{ type: String }],                    // simple list
-    steps: [{ type: String }],                          // simple list
+    shortDescription: { type: String, required: true },
+
+    ingredients: [{ type: String }],
+    steps: [{ type: String }],
+
     prepTimeMins: { type: Number, default: 0, min: 0 },
     cookTimeMins: { type: Number, default: 0, min: 0 },
     servings: { type: Number, default: 1, min: 1 },
 
     tags: [{ type: String, index: true }],
-    category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
-    },
+    category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
 
     isActive: { type: Boolean, default: true },
     featured: { type: Boolean, default: false },
+
     author: {
       name: String,
       userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
@@ -28,7 +27,6 @@ const recipeSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
 
 recipeSchema.index({ featured: 1, isActive: 1, createdAt: -1 });
 recipeSchema.index({ title: "text", shortDescription: "text", tags: "text" });

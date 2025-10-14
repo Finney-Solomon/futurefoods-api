@@ -12,6 +12,9 @@ import productRoutes from './routes/productRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
+import recipeRoutes from "./routes/recipeRoutes.js";
+
+
 
 // NOTE: errorHandler is a DEFAULT export
 import errorHandler from './middleware/errorHandler.js';
@@ -45,6 +48,7 @@ app.use(
 // --- Health check ---
 app.get('/', (_, res) => res.json({ ok: true, name: 'Future Foods API' }));
 
+
 // --- Routes ---  //
   console.log("reqreqreq")
 app.use('/api/auth', authRoutes);
@@ -53,6 +57,11 @@ app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/blogs', blogRoutes);
+app.use("/api/recipes", recipeRoutes);
+
+
+
+
 
 // --- Error handler (must be after routes) ---
 app.use(errorHandler);
