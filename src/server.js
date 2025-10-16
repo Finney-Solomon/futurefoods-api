@@ -12,75 +12,40 @@ import productRoutes from './routes/productRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
-import recipeRoutes from "./routes/recipeRoutes.js";
-
-
-
-// NOTE: errorHandler is a DEFAULT export
+import recipeRoutes from './routes/recipeRoutes.js';
 import errorHandler from './middleware/errorHandler.js';
 
 const app = express();
 
-// --- Security, parsing, logging ---
+// Security, parsing, logging
 const allowedOrigins = process.env.CORS_ORIGIN
   ? JSON.parse(process.env.CORS_ORIGIN)
-  : "*";
+  : '*';
 
 app.use(helmet());
-
-app.use(
-  cors({
-    origin: allowedOrigins,
-    credentials: true,
-  })
-);
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json({ limit: '1mb' }));
 app.use(morgan('dev'));
-app.use(
-  rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 500,
-    standardHeaders: true,
-    legacyHeaders: false,
-  })
-);
+app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 500, standardHeaders: true, legacyHeaders: false }));
 
-// --- Health check ---
+// Health check
 app.get('/', (_, res) => res.json({ ok: true, name: 'Future Foods API' }));
 
-
-// --- Routes ---  //
-  console.log("reqreqreq")
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/blogs', blogRoutes);
-app.use("/api/recipes", recipeRoutes);
+app.use('/api/recipes', recipeRoutes);
 
-
-
-
-
-// --- Error handler (must be after routes) ---
+// Errors
 app.use(errorHandler);
 
-// --- Start server (ONCE) after DB is ready ---
-const port = process.env.PORT || 5005;
+// ⛔️ DO NOT call app.listen on Vercel
+// ✅ Ensure DB connection (with caching inside connectDB)
+await connectDB();
 
-const start = async () => {
-  try {
-    await connectDB(); // ensure DB connected before listening
-    app.listen(port, () => console.log(`API listening on ${port}`));
-  } catch (err) {
-    console.error('Failed to start server:', err);
-    process.exit(1);
-  }
-};
-
-start();
-
-// Graceful shutdown for nodemon/ctrl+c
-process.on('SIGINT', () => process.exit(0));
-process.on('SIGTERM', () => process.exit(0));
+// ✅ Export the Express app for Vercel
+export default app;
