@@ -48,13 +48,13 @@ app.use('/api/recipes', recipeRoutes);
 // Errors
 app.use(errorHandler);
 
-// ✅ Ensure DB connection (top-level)
+// Ensure DB connection (top-level)
 await connectDB();
 
-// ✅ Export app for Vercel serverless
+// Export app for Vercel serverless
 export default app;
 
-// 🧪 Local dev only (Vercel will NOT run this)
+// Local dev only (Vercel will NOT run this)
 if (process.env.NODE_ENV !== 'production') {
   const port = process.env.PORT || 5005;
   app.listen(port, () => console.log(`Local API running on ${port}`));
