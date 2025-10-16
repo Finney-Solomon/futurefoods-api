@@ -1,10 +1,15 @@
 {
   "name": "future-foods-server",
+  "private": true,
   "type": "module",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "seed": "node seed.js"
+    "seed": "node seed.js",
+    "vercel-build": "echo \"No build step needed for Express API\""
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
