@@ -51,13 +51,25 @@ app.use(
 app.get("/", (_, res) => res.json({ ok: true, name: "Future Foods API" }));
 
 // Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/categories", categoryRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/cart", cartRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/blogs", blogRoutes);
-app.use("/api/recipes", recipeRoutes);
+
+app.get("/_whoami", (req, res) => res.json({ ok: true, path: req.path }));
+
+// ---- Routes (NO /api prefix here) ----
+app.use("/auth", authRoutes);
+app.use("/categories", categoryRoutes);
+app.use("/products", productRoutes);
+app.use("/cart", cartRoutes);
+app.use("/orders", orderRoutes);
+app.use("/blogs", blogRoutes);
+app.use("/recipes", recipeRoutes);
+
+// app.use("/api/auth", authRoutes);
+// app.use("/api/categories", categoryRoutes);
+// app.use("/api/products", productRoutes);
+// app.use("/api/cart", cartRoutes);
+// app.use("/api/orders", orderRoutes);
+// app.use("/api/blogs", blogRoutes);
+// app.use("/api/recipes", recipeRoutes);
 
 // Errors
 app.use(errorHandler);
