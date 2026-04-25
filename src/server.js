@@ -56,23 +56,24 @@ app.get("/", (_, res) => res.json({ ok: true, name: "Future Foods API" }));
 app.get("/_whoami", (req, res) => res.json({ ok: true, path: req.path }));
 
 // ---- Routes (NO /api prefix here) ----
-// app.use("/auth", authRoutes);
-// app.use("/categories", categoryRoutes);
-// app.use("/products", productRoutes);
-// app.use("/cart", cartRoutes);
-// app.use("/orders", orderRoutes);
-// app.use("/blogs", blogRoutes);
-// app.use("/recipes", recipeRoutes);
+app.use("/auth", authRoutes);
+app.use("/categories", categoryRoutes);
+app.use("/products", productRoutes);
+app.use("/cart", cartRoutes);
+app.use("/orders", orderRoutes);
+app.use("/blogs", blogRoutes);
+app.use("/recipes", recipeRoutes);
+app.use("/reviews", reviewRoutes);
 
 // ---- Routes (WITH /api prefix) ----
-app.use("/api/auth", authRoutes);
-app.use("/api/categories", categoryRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/cart", cartRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/blog", blogRoutes);
-app.use("/api/recipes", recipeRoutes);
-app.use("/api/reviews", reviewRoutes);
+// app.use("/api/auth", authRoutes);
+// app.use("/api/categories", categoryRoutes);
+// app.use("/api/products", productRoutes);
+// app.use("/api/cart", cartRoutes);
+// app.use("/api/orders", orderRoutes);
+// app.use("/api/blog", blogRoutes);
+// app.use("/api/recipes", recipeRoutes);
+// app.use("/api/reviews", reviewRoutes);
 
 // Errors
 app.use(errorHandler);
@@ -96,9 +97,7 @@ if (process.env.NODE_ENV !== "production") {
     server.on("error", (error) => {
       if (error.code === "EADDRINUSE" && attemptsRemaining > 0) {
         const nextPort = port + 1;
-        console.warn(
-          `Port ${port} is in use. Retrying on ${nextPort}...`,
-        );
+        console.warn(`Port ${port} is in use. Retrying on ${nextPort}...`);
         startDevServer(nextPort, attemptsRemaining - 1);
         return;
       }
