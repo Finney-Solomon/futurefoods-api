@@ -1,0 +1,320 @@
+{
+  "info": {
+    "name": "Future Foods - Stripe Payment API",
+    "description": "Complete Stripe payment integration for Future Foods API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"Password123\",\n  \"role\": \"customer\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"Password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders - Creation",
+      "item": [
+        {
+          "name": "Add Product to Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"product_id_here\",\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["cart"]
+            }
+          }
+        },
+        {
+          "name": "Create Order from Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": {\n    \"line1\": \"123 Main Street, Apt 4B\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"pin\": \"10001\",\n    \"phone\": \"+1234567890\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stripe Payment - Integration",
+      "item": [
+        {
+          "name": "1. Create Payment Intent",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}/payment-intent",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "{{orderId}}", "payment-intent"]
+            }
+          },
+          "description": "Creates a Stripe Payment Intent for the order. Returns clientSecret to use on frontend."
+        },
+        {
+          "name": "2. Confirm Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentIntentId\": \"pi_xxxxx_from_step_1\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}/confirm-payment",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "{{orderId}}", "confirm-payment"]
+            }
+          },
+          "description": "Confirms the payment with Stripe and updates order status. Call this after card details are collected on frontend."
+        },
+        {
+          "name": "3. Get Payment Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}/payment-status",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "{{orderId}}", "payment-status"]
+            }
+          },
+          "description": "Check the current payment and order status."
+        }
+      ]
+    },
+    {
+      "name": "Orders - Retrieval",
+      "item": [
+        {
+          "name": "Get My Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders/myOrders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "myOrders"]
+            }
+          }
+        },
+        {
+          "name": "Get All Orders (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Testing - Stripe Test Cards",
+      "item": [
+        {
+          "name": "Test Card - Visa Success (4242)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardNumber\": \"4242424242424242\",\n  \"expiryMonth\": \"12\",\n  \"expiryYear\": \"2025\",\n  \"cvc\": \"123\",\n  \"cardholderName\": \"Test User\"\n}"
+            },
+            "description": "Use this card for successful payment tests. Any future expiry date and any 3-digit CVC."
+          }
+        },
+        {
+          "name": "Test Card - Visa Declined (4000)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardNumber\": \"4000000000000002\",\n  \"expiryMonth\": \"12\",\n  \"expiryYear\": \"2025\",\n  \"cvc\": \"123\",\n  \"cardholderName\": \"Test User\"\n}"
+            },
+            "description": "Use this card to test declined payment scenarios."
+          }
+        },
+        {
+          "name": "Test Card - Mastercard (5555)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardNumber\": \"5555555555554444\",\n  \"expiryMonth\": \"12\",\n  \"expiryYear\": \"2025\",\n  \"cvc\": \"123\",\n  \"cardholderName\": \"Test User\"\n}"
+            },
+            "description": "Use this card for Mastercard payment tests."
+          }
+        },
+        {
+          "name": "Test Card - Amex (3782)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardNumber\": \"378282246310005\",\n  \"expiryMonth\": \"12\",\n  \"expiryYear\": \"2025\",\n  \"cvc\": \"1234\",\n  \"cardholderName\": \"Test User\"\n}"
+            },
+            "description": "Use this card for American Express tests. CVC is 4 digits for Amex."
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "your_jwt_token_here",
+      "type": "string"
+    },
+    {
+      "key": "orderId",
+      "value": "order_id_from_create_order_response",
+      "type": "string"
+    },
+    {
+      "key": "paymentIntentId",
+      "value": "pi_xxxxx_from_create_payment_intent",
+      "type": "string"
+    }
+  ]
+}

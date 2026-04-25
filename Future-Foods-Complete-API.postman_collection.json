@@ -1,0 +1,905 @@
+{
+  "info": {
+    "name": "Future Foods - Complete API Collection (End-to-End)",
+    "description": "Complete end-to-end testing collection for Future Foods API including authentication, categories, products, recipes, blogs, cart, and Stripe payments",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Register Customer User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Customer\",\n  \"email\": \"customer@example.com\",\n  \"password\": \"Password123\",\n  \"role\": \"customer\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Register Admin User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Admin User\",\n  \"email\": \"admin@example.com\",\n  \"password\": \"AdminPassword123\",\n  \"role\": \"admin\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer@example.com\",\n  \"password\": \"Password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"AdminPassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "refresh"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Categories",
+      "item": [
+        {
+          "name": "List All Categories (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"]
+            }
+          }
+        },
+        {
+          "name": "Create Category (Admin Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Organic Vegetables\",\n  \"description\": \"Certified organic vegetables\",\n  \"icon\": \"🥬\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"]
+            }
+          }
+        },
+        {
+          "name": "Update Category (Admin Only)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Fresh Organic Vegetables\",\n  \"description\": \"Fresh certified organic vegetables\",\n  \"icon\": \"🥗\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "{{categoryId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Category (Admin Only)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "{{categoryId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Products",
+      "item": [
+        {
+          "name": "List All Products (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?limit=10&page=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Product by Slug (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/organic-spinach",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "organic-spinach"]
+            }
+          }
+        },
+        {
+          "name": "Create Product (Admin Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Organic Spinach\",\n  \"slug\": \"organic-spinach\",\n  \"description\": \"Fresh organic spinach leaves from our farm\",\n  \"pricePaise\": 5000,\n  \"imageUrl\": \"https://example.com/spinach.jpg\",\n  \"category\": \"{{categoryId}}\",\n  \"stock\": 100,\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"]
+            }
+          }
+        },
+        {
+          "name": "Update Product (Admin Only)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Premium Fresh Organic Spinach\",\n  \"description\": \"Premium fresh organic spinach leaves\",\n  \"pricePaise\": 5500,\n  \"stock\": 150\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "{{productId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Product (Admin Only)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "{{productId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Recipes",
+      "item": [
+        {
+          "name": "List All Recipes (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/recipes?featured=false&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["recipes"],
+              "query": [
+                {
+                  "key": "featured",
+                  "value": "false"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Recipe by Slug (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/recipes/slug/spinach-salad",
+              "host": ["{{baseUrl}}"],
+              "path": ["recipes", "slug", "spinach-salad"]
+            }
+          }
+        },
+        {
+          "name": "Create Recipe (Admin Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Healthy Spinach Salad\",\n  \"slug\": \"spinach-salad\",\n  \"description\": \"A light and nutritious spinach salad\",\n  \"content\": \"Full recipe content here...\",\n  \"ingredients\": [\"Fresh Spinach\", \"Olive Oil\", \"Lemon\", \"Sea Salt\", \"Garlic\"],\n  \"instructions\": \"1. Wash spinach thoroughly\\n2. Mix olive oil and lemon juice\\n3. Toast garlic in the dressing\\n4. Toss spinach with dressing\\n5. Serve immediately\",\n  \"cookTime\": 15,\n  \"servings\": 2,\n  \"imageUrl\": \"https://example.com/spinach-salad.jpg\",\n  \"isFeatured\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/recipes",
+              "host": ["{{baseUrl}}"],
+              "path": ["recipes"]
+            }
+          }
+        },
+        {
+          "name": "Update Recipe (Admin Only)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Premium Spinach Salad with Roasted Nuts\",\n  \"cookTime\": 20,\n  \"servings\": 4\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/recipes/{{recipeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["recipes", "{{recipeId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Recipe (Admin Only)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/recipes/{{recipeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["recipes", "{{recipeId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Blog",
+      "item": [
+        {
+          "name": "List All Blog Posts (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/blog?limit=10&page=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["blog"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Featured Blog Posts (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/blog/featured",
+              "host": ["{{baseUrl}}"],
+              "path": ["blog", "featured"]
+            }
+          }
+        },
+        {
+          "name": "Get Blog Post by Slug (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/blog/organic-farming-tips",
+              "host": ["{{baseUrl}}"],
+              "path": ["blog", "organic-farming-tips"]
+            }
+          }
+        },
+        {
+          "name": "Create Blog Post (Admin Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Guide to Organic Farming\",\n  \"slug\": \"organic-farming-tips\",\n  \"content\": \"Detailed content about organic farming practices...\",\n  \"excerpt\": \"Learn best practices for sustainable organic farming\",\n  \"author\": \"John Doe\",\n  \"imageUrl\": \"https://example.com/farming.jpg\",\n  \"isFeatured\": true,\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/blog",
+              "host": ["{{baseUrl}}"],
+              "path": ["blog"]
+            }
+          }
+        },
+        {
+          "name": "Update Blog Post (Admin Only)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Advanced Organic Farming Techniques 2024\",\n  \"content\": \"Updated content with new techniques...\",\n  \"isFeatured\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/blog/{{blogId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["blog", "{{blogId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Blog Post (Admin Only)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/blog/{{blogId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["blog", "{{blogId}}"]
+            }
+          }
+        },
+        {
+          "name": "Restore Blog Post (Admin Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/blog/{{blogId}}/restore",
+              "host": ["{{baseUrl}}"],
+              "path": ["blog", "{{blogId}}", "restore"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Shopping Cart",
+      "item": [
+        {
+          "name": "Get My Cart (Authenticated)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["cart"]
+            }
+          }
+        },
+        {
+          "name": "Add Item to Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cart/items",
+              "host": ["{{baseUrl}}"],
+              "path": ["cart", "items"]
+            }
+          }
+        },
+        {
+          "name": "Update Cart Item Quantity",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 5\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cart/items/{{cartItemId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["cart", "items", "{{cartItemId}}"]
+            }
+          }
+        },
+        {
+          "name": "Remove Item from Cart",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/cart/items/{{cartItemId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["cart", "items", "{{cartItemId}}"]
+            }
+          }
+        },
+        {
+          "name": "Clear Entire Cart",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["cart"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Orders & Stripe Payment",
+      "item": [
+        {
+          "name": "Create Order from Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": {\n    \"line1\": \"123 Green Street, Apt 4B\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"pin\": \"10001\",\n    \"phone\": \"+14155552671\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"]
+            }
+          }
+        },
+        {
+          "name": "Create Payment Intent",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}/payment-intent",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "{{orderId}}", "payment-intent"]
+            }
+          }
+        },
+        {
+          "name": "Confirm Payment with Stripe",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentIntentId\": \"pi_xxxxx_from_create_payment_intent\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}/confirm-payment",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "{{orderId}}", "confirm-payment"]
+            }
+          }
+        },
+        {
+          "name": "Get Payment Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}/payment-status",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "{{orderId}}", "payment-status"]
+            }
+          }
+        },
+        {
+          "name": "Get My Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders/myOrders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "myOrders"]
+            }
+          }
+        },
+        {
+          "name": "Get All Orders (Admin Only)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TEST CARDS (Stripe)",
+      "item": [
+        {
+          "name": "✅ Successful Payment - Visa 4242",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardNumber\": \"4242 4242 4242 4242\",\n  \"expiryMonth\": \"12\",\n  \"expiryYear\": \"2026\",\n  \"cvc\": \"123\",\n  \"cardholderName\": \"Test User\",\n  \"note\": \"Use these details in Stripe payment form on frontend\"\n}"
+            }
+          }
+        },
+        {
+          "name": "❌ Declined Payment - Visa 4000",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardNumber\": \"4000 0000 0000 0002\",\n  \"expiryMonth\": \"12\",\n  \"expiryYear\": \"2026\",\n  \"cvc\": \"123\",\n  \"cardholderName\": \"Test User\",\n  \"note\": \"Card will be declined - use to test error handling\"\n}"
+            }
+          }
+        },
+        {
+          "name": "💳 Mastercard 5555",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardNumber\": \"5555 5555 5555 4444\",\n  \"expiryMonth\": \"12\",\n  \"expiryYear\": \"2026\",\n  \"cvc\": \"123\",\n  \"cardholderName\": \"Test User\"\n}"
+            }
+          }
+        },
+        {
+          "name": "🎫 American Express 3782",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardNumber\": \"3782 822463 10005\",\n  \"expiryMonth\": \"12\",\n  \"expiryYear\": \"2026\",\n  \"cvc\": \"1234\",\n  \"cardholderName\": \"Test User\",\n  \"note\": \"Amex uses 4-digit CVC\"\n}"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "customerToken",
+      "value": "your_customer_jwt_token_here",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "your_admin_jwt_token_here",
+      "type": "string"
+    },
+    {
+      "key": "refreshToken",
+      "value": "your_refresh_token_here",
+      "type": "string"
+    },
+    {
+      "key": "categoryId",
+      "value": "category_id_from_create_response",
+      "type": "string"
+    },
+    {
+      "key": "productId",
+      "value": "product_id_from_create_response",
+      "type": "string"
+    },
+    {
+      "key": "recipeId",
+      "value": "recipe_id_from_create_response",
+      "type": "string"
+    },
+    {
+      "key": "blogId",
+      "value": "blog_id_from_create_response",
+      "type": "string"
+    },
+    {
+      "key": "orderId",
+      "value": "order_id_from_create_order_response",
+      "type": "string"
+    },
+    {
+      "key": "cartItemId",
+      "value": "cart_item_id_from_response",
+      "type": "string"
+    },
+    {
+      "key": "paymentIntentId",
+      "value": "pi_xxxxx_from_create_payment_intent",
+      "type": "string"
+    }
+  ]
+}

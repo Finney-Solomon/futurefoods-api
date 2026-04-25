@@ -13,6 +13,7 @@ import cartRoutes from "./routes/cartRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import recipeRoutes from "./routes/recipeRoutes.js";
+import reviewRoutes from "./routes/reviewRoutes.js";
 import errorHandler from "./middleware/errorHandler.js";
 
 const app = express();
@@ -20,12 +21,12 @@ const app = express();
 // CORS: if CORS_ORIGIN is provided, it MUST be valid JSON (e.g., ["*"] or ["http://localhost:5173"]).
 let allowedOrigins;
 try {
- allowedOrigins = process.env.CORS_ORIGIN
-  ? JSON.parse(process.env.CORS_ORIGIN)
-  : "*";
+  allowedOrigins = process.env.CORS_ORIGIN
+    ? JSON.parse(process.env.CORS_ORIGIN)
+    : "*";
 } catch (error) {
- console.error("CORS_ORIGIN parsing error. Defaulting to *.", error);
- allowedOrigins = "*";
+  console.error("CORS_ORIGIN parsing error. Defaulting to *.", error);
+  allowedOrigins = "*";
 }
 
 // ⚠️ IMPORTANT DEBUGGING STEP: Check Vercel logs for this output after deployment
@@ -39,12 +40,12 @@ app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan("dev"));
 app.use(
- rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 500,
-  standardHeaders: true,
-  legacyHeaders: false,
- })
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 500,
+    standardHeaders: true,
+    legacyHeaders: false,
+  }),
 );
 
 // Health
@@ -55,21 +56,23 @@ app.get("/", (_, res) => res.json({ ok: true, name: "Future Foods API" }));
 app.get("/_whoami", (req, res) => res.json({ ok: true, path: req.path }));
 
 // ---- Routes (NO /api prefix here) ----
-app.use("/auth", authRoutes);
-app.use("/categories", categoryRoutes);
-app.use("/products", productRoutes);
-app.use("/cart", cartRoutes);
-app.use("/orders", orderRoutes);
-app.use("/blogs", blogRoutes);
-app.use("/recipes", recipeRoutes);
+// app.use("/auth", authRoutes);
+// app.use("/categories", categoryRoutes);
+// app.use("/products", productRoutes);
+// app.use("/cart", cartRoutes);
+// app.use("/orders", orderRoutes);
+// app.use("/blogs", blogRoutes);
+// app.use("/recipes", recipeRoutes);
 
-// app.use("/api/auth", authRoutes);
-// app.use("/api/categories", categoryRoutes);
-// app.use("/api/products", productRoutes);
-// app.use("/api/cart", cartRoutes);
-// app.use("/api/orders", orderRoutes);
-// app.use("/api/blogs", blogRoutes);
-// app.use("/api/recipes", recipeRoutes);
+// ---- Routes (WITH /api prefix) ----
+app.use("/api/auth", authRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/blog", blogRoutes);
+app.use("/api/recipes", recipeRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 // Errors
 app.use(errorHandler);
@@ -82,6 +85,28 @@ export default app;
 
 // Local dev only (Vercel will NOT run this)
 if (process.env.NODE_ENV !== "production") {
- const port = process.env.PORT || 5005;
- app.listen(port, () => console.log(`Local API running on ${port}`));
+  const basePort = Number(process.env.PORT) || 5005;
+  const maxPortAttempts = 10;
+
+  const startDevServer = (port, attemptsRemaining) => {
+    const server = app.listen(port, () =>
+      console.log(`Local API running on ${port}`),
+    );
+
+    server.on("error", (error) => {
+      if (error.code === "EADDRINUSE" && attemptsRemaining > 0) {
+        const nextPort = port + 1;
+        console.warn(
+          `Port ${port} is in use. Retrying on ${nextPort}...`,
+        );
+        startDevServer(nextPort, attemptsRemaining - 1);
+        return;
+      }
+
+      console.error("Failed to start local API server:", error);
+      process.exit(1);
+    });
+  };
+
+  startDevServer(basePort, maxPortAttempts);
 }
